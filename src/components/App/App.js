@@ -23,7 +23,10 @@ function App() {
       <Searchpanel />
       <div>
         {data ? <WeatherCard /> : null}
-        {dataLocation ? <CurrentWeatherCard /> : <CurrentWeatherCard />}
+        {dataLocation ? (
+          <CurrentWeatherCard data={dataLocation} />
+        ) : // <CurrentWeatherCard />
+        null}
       </div>
     </div>
   );

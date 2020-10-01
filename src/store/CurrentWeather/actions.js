@@ -30,9 +30,8 @@ export const fetchWeatherByLocation = () => async (dispatch) => {
   try {
     navigator.geolocation.getCurrentPosition(async ({ coords }) => {
       const { latitude: lat, longitude: lon } = coords;
-      // console.log(lat, lon);
       const responce = await axiosWeatherCurrent.get(
-        `onecall?lat=${+lat.toFixed(2)}&lon=${+lon.toFixed(2)}`
+        `onecall?lat=${lat}&lon=${lon}`
       );
 
       dispatch(fetchWeatherByLocationSucces(responce.data));

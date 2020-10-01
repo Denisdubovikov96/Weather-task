@@ -6,11 +6,11 @@ import classes from "./CurrentWeatherCard.module.scss";
 // !!! Время
 // new Date(dt * 1000).toDateString()
 
-export default function CurrentWeatherCard() {
-  const { dataLocation } = useSelector((state) => state.currentWeather);
+export default function CurrentWeatherCard({ data }) {
+  // const { dataLocation } = useSelector((state) => state.currentWeather);
 
-  if (dataLocation) {
-    const { current, timezone, daily } = dataLocation;
+  if (data) {
+    const { current, timezone, daily } = data;
     const {
       clouds,
       dt,
