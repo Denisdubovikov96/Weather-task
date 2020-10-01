@@ -14,9 +14,9 @@ function App() {
   const { data } = useSelector((state) => state.weather);
   const { dataLocation } = useSelector((state) => state.currentWeather);
 
-  // useEffect(() => {
-  //   dispatch(fetchWeatherByLocation());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchWeatherByLocation());
+  }, []);
 
   return (
     <div className={classname.App}>
