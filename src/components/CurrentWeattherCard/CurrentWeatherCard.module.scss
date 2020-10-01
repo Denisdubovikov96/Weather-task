@@ -1,0 +1,137 @@
+.card {
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  margin-top: 10px;
+  display: flex; 
+}
+.card_left {
+  display: flex;
+  min-width: 430px;
+  width: 35%;
+  flex-direction: column;
+  flex-wrap: wrap;
+  border-right: 1px solid #dbdbdb;
+  padding: 10px 10px;
+}
+.left_head {
+  display: flex;
+  h3 {
+    font-size: 2rem;
+    padding: 0 0 10px 0;
+  }
+
+  .title_description {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    h3,p {
+      text-align: center;
+      width: 100%;
+    }
+    p {
+      margin-bottom: 5px;
+    }
+  }
+}
+.left_body {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.header_description {
+  width: 200px;
+  padding: 10px;
+
+  h4 {
+    padding: 0 0 6px 0;
+  }
+  ul {
+    list-style: none;
+    li {
+      margin-bottom: 5px;
+    }
+  }
+}
+
+.card_right {
+  flex: 1;
+  display: flex;
+  overflow-x: scroll;
+  >div {
+    padding: 20px;
+    min-width: 230px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    h4{
+      text-align: center;
+    }
+
+    div {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      span {
+        font-weight: 700;
+        font-size: 22px;
+        &::after{
+          content: '\00B0 C';
+          
+        }
+      }
+    }
+
+    p,ul{
+      width: 100%;
+    }
+    img{
+      width: 100px;
+      height: 100px;
+      &:last-child{
+        margin-top: auto;
+      }
+    }
+
+    
+    border-right: 1px solid #dbdbdb;
+    &:last-child{
+      border: none;
+    }
+
+    p {
+      margin: 4px 0;
+    }
+    p,li {
+      display: flex;
+      justify-content: space-between;
+      span{
+        &:last-child{
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .card {
+    flex-direction: column;
+  }
+  .card_left {
+    min-width: 300px;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #dbdbdb;
+  }
+  .left_head{
+    flex-direction: column;
+    align-items: center;
+  }
+}
