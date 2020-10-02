@@ -23,18 +23,24 @@ const fetchWeatherByLocationError = (error) => {
     payload: error,
   };
 };
-
+// получаем текущую локацию и погоду по ней
 export const fetchWeatherByLocation = () => async (dispatch) => {
   dispatch(fetchWeatherByLocationStart());
 
   try {
     navigator.geolocation.getCurrentPosition(async ({ coords }) => {
       const { latitude: lat, longitude: lon } = coords;
-      const responce = await axiosWeatherCurrent.get(
-        `onecall?lat=${lat}&lon=${lon}`
+
+      const daily = await axiosWeatherCurrent.get(
+        `onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly`
+      );
+      const current = await axiosWeatherCurrent.get(
+        `weather?lat=${lat}&lon=${lon}`
       );
 
-      dispatch(fetchWeatherByLocationSucces(responce.data));
+      const data = { daily: daily.data.daily, current: current.data };
+
+      dispatch(fetchWeatherByLocationSucces(data));
     });
   } catch (e) {
     dispatch(fetchWeatherByLocationError(e.message));

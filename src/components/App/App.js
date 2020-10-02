@@ -1,34 +1,20 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 
-import { fetchWeatherByLocation } from "../../store/CurrentWeather/actions";
-
-import CurrentWeatherCard from "../CurrentWeattherCard/CurrentWeatherCard";
-import Searchpanel from "../Searchpanel/Searchpanel";
-import WeatherCard from "../WeatherCard/WeatherCard";
-
-import classname from "./App.module.scss";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Layout from "../../hoc/Layout/Layout";
+import MainRoute from "../../routes/MainRoute";
+import MyLocations from "../../routes/MyLocations";
 
 function App() {
-  const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.weather);
-  const { dataLocation } = useSelector((state) => state.currentWeather);
-
-  useEffect(() => {
-    dispatch(fetchWeatherByLocation());
-  }, []);
-
   return (
-    <div className={classname.App}>
-      <Searchpanel />
-      <div>
-        {data ? <WeatherCard /> : null}
-        {dataLocation ? (
-          <CurrentWeatherCard data={dataLocation} />
-        ) : // <CurrentWeatherCard />
-        null}
-      </div>
-    </div>
+    <Router>
+      <Layout>
+        <Switch>
+          <Route path="/" exact component={MainRoute} />
+          <Route path="/my-locations" component={MyLocations} />
+        </Switch>
+      </Layout>
+    </Router>
   );
 }
 

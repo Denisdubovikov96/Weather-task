@@ -1,31 +1,20 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { addCity } from "../../store/weather/actions";
 
 import classes from "./CurrentWeatherCard.module.scss";
 
-// !!! Время
-// new Date(dt * 1000).toDateString()
-
 export default function CurrentWeatherCard({ data }) {
-  // const { dataLocation } = useSelector((state) => state.currentWeather);
+  const dispatch = useDispatch();
 
   if (data) {
-    const { current, timezone, daily } = data;
-    const {
-      clouds,
-      dt,
-      feels_like,
-      humidity,
-      pressure,
-      sunrise,
-      sunset,
-      temp,
-      wind_deg,
-      wind_speed,
-      weather,
-    } = current;
+    const { current, daily } = data;
+    const { clouds, dt, wind, weather, name, main, sys } = current;
 
     const currentUrl = `http://openweathermap.org/img/wn/${weather[0].icon}@2x.png`;
+
+    const windNavigate =
+      "https://ssl.gstatic.com/m/images/weather/wind_unselected.svg";
 
     return (
       <div className={classes.card}>
@@ -34,8 +23,9 @@ export default function CurrentWeatherCard({ data }) {
             <div>
               <img src={currentUrl} alt="" />
             </div>
+
             <div className={classes.title_description}>
-              <h3>{timezone}</h3>
+              <h3>{name}</h3>
               <p>Состоянием на {new Date(dt * 1000).toLocaleTimeString()}</p>
               <p>{weather[0].description}</p>
             </div>
@@ -45,47 +35,61 @@ export default function CurrentWeatherCard({ data }) {
             <div className={classes.header_description}>
               <h4>Температура</h4>
               <ul>
-                <li>{`${temp} *C`}</li>
-                <li>{`Ощущается как ${feels_like} *С`}</li>
+                <li>{`${main.temp} *C`}</li>
+                <li>{`Ощущается как ${main.feels_like} *С`}</li>
               </ul>
             </div>
 
             <div className={classes.header_description}>
               <h4>Восход / Закат</h4>
               <ul>
-                <li>{new Date(sunrise * 1000).toLocaleTimeString()}</li>
-                <li>{new Date(sunset * 1000).toLocaleTimeString()}</li>
+                <li>{new Date(sys.sunrise * 1000).toLocaleTimeString()}</li>
+                <li>{new Date(sys.sunset * 1000).toLocaleTimeString()}</li>
               </ul>
             </div>
 
             <div className={classes.header_description}>
               <h4>Давление</h4>
               <ul>
-                <li>{pressure}</li>
+                <li>{(main.pressure / 1.333).toFixed(1)}</li>
               </ul>
             </div>
 
             <div className={classes.header_description}>
               <h4>Влажность</h4>
               <ul>
-                <li>{humidity}</li>
+                <li>{`${main.humidity} %`}</li>
               </ul>
             </div>
 
             <div className={classes.header_description}>
               <h4>Ветер</h4>
               <ul>
-                <li>{wind_deg}</li>
-                <li>{wind_speed}</li>
+                <li>{`${wind.speed} м/с`}</li>
+                <li>
+                  <img
+                    style={{
+                      transform: `rotate(${wind.deg}deg)`,
+                      width: 24,
+                      height: 24,
+                    }}
+                    src={windNavigate}
+                    alt=""
+                  />
+                </li>
               </ul>
             </div>
 
             <div className={classes.header_description}>
               <h4>Облачность</h4>
               <ul>
-                <li>{`${clouds} %`}</li>
+                <li>{`${clouds.all} %`}</li>
               </ul>
             </div>
+          </div>
+
+          <div className={classes.left_footer}>
+            <button onClick={() => dispatch(addCity(name))}>Click</button>
           </div>
         </div>
         {/* left */}
@@ -101,14 +105,12 @@ export default function CurrentWeatherCard({ data }) {
               sunrise,
               sunset,
               weather,
-              wind_deg,
+              wind_deg: itemDeg,
+              wind_speed,
               temp,
             } = item;
 
             const dayUrl = `http://openweathermap.org/img/wn/${weather[0].icon}@2x.png`;
-
-            const windNavigate =
-              "https://ssl.gstatic.com/m/images/weather/wind_unselected.svg";
 
             return (
               <div key={item.dt} className={classes.right_item}>
@@ -130,7 +132,7 @@ export default function CurrentWeatherCard({ data }) {
                 </p>
                 <p>
                   <span>Давление</span>
-                  <span>{` ${(pressure / 1.333).toFixed(1)}`}</span>
+                  <span>{`${(pressure / 1.333).toFixed(1)}`}</span>
                 </p>
                 <p>
                   <span>Восход</span>
@@ -154,7 +156,7 @@ export default function CurrentWeatherCard({ data }) {
 
                 <img
                   style={{
-                    transform: `rotate(${wind_deg}deg)`,
+                    transform: `rotate(${itemDeg}deg)`,
                     width: 24,
                     height: 24,
                   }}

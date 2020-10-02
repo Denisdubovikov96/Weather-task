@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { fetchWeather } from "../../store/weather/actions";
-
-import { fetchWeatherByLocation } from "../../store/CurrentWeather/actions";
+import { addCity, fetchWeather } from "../../store/weather/actions";
 
 import classname from "./Searchpanel.module.scss";
+import { Link } from "react-router-dom";
 
 export default function Searchpanel() {
   const dispatch = useDispatch();
@@ -13,6 +12,7 @@ export default function Searchpanel() {
   const [term, setTerm] = useState("");
 
   const searchHandler = (term) => {
+    dispatch(addCity("Житомир"));
     dispatch(fetchWeather(term));
     setTerm("");
   };
@@ -23,10 +23,12 @@ export default function Searchpanel() {
         value={term}
         onChange={(e) => setTerm(e.target.value)}
       />
-      <button onClick={() => searchHandler(term)}>Search</button>
-      <button onClick={() => dispatch(fetchWeatherByLocation())}>
-        GPS Weather
-      </button>
+      <div>
+        <button onClick={() => searchHandler(term)}>Поиск</button>
+
+        <Link to="/my-locations">Мои Локации</Link>
+        <Link to="/">Главная</Link>
+      </div>
     </div>
   );
 }

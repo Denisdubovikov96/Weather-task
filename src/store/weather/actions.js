@@ -1,8 +1,10 @@
-import { axiosWeather } from "../../api/weatherApi";
+import { axiosWeatherCurrent } from "../../api/weatherApi";
 import {
   FETCH_WEATHER_ERROR,
   FETCH_WEATHER_START,
   FETCH_WEATHER_SUCCESS,
+  ADD_TRAKKED_CITY_NAME,
+  FETCH_TRACKED_CITIES,
 } from "./actionTypes";
 
 const fetchWeatherStart = () => {
@@ -17,12 +19,7 @@ const fetchWeatherSucces = (data) => {
     payload: data,
   };
 };
-// const fetchWeatherByLocationSucces = (data) => {
-//   return {
-//     type: FETCH_WEATHER_BY_LOCATION_SUCCESS,
-//     payload: data,
-//   };
-// };
+
 const fetchWeatherError = (error) => {
   return {
     type: FETCH_WEATHER_ERROR,
@@ -30,30 +27,71 @@ const fetchWeatherError = (error) => {
   };
 };
 
+const addCityToTracking = (cityName) => {
+  return {
+    type: ADD_TRAKKED_CITY_NAME,
+    payload: cityName,
+  };
+};
+
+const fetchTrackedCities = (dataArray) => {
+  return {
+    type: FETCH_TRACKED_CITIES,
+    payload: dataArray,
+  };
+};
+// поиск города по названию
 export const fetchWeather = (term) => async (dispatch) => {
   dispatch(fetchWeatherStart());
 
   try {
-    const response = await axiosWeather.get(`weather?q=${term}`);
-    dispatch(fetchWeatherSucces(response.data));
+    const current = await axiosWeatherCurrent.get(`weather?q=${term}`);
+
+    const { lat, lon } = current.data.coord;
+
+    const daily = await axiosWeatherCurrent.get(
+      `onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly`
+    );
+
+    const data = { daily: daily.data.daily, current: current.data };
+    dispatch(fetchWeatherSucces(data));
   } catch (e) {
     dispatch(fetchWeatherError(e.message));
   }
 };
+// добавляем город к отслеживаемым
+export const addCity = (city) => (dispatch, getState) => {
+  const cities = getState().weather.trackedCities;
 
-// export const fetchWeatherByLocation = () => async (dispatch) => {
-//   dispatch(fetchWeatherStart());
+  if (cities.includes(city)) {
+    return;
+  } else {
+    dispatch(addCityToTracking([...cities, city]));
+  }
+};
+// Получаем все города из отслеживаемых
+export const fetchWeathersMyCities = () => async (dispatch, getState) => {
+  dispatch(fetchWeatherStart());
+  const myCities = getState().weather.trackedCities;
+  try {
+    const dataArr = await Promise.all(
+      myCities.map(async (city) => {
+        const current = await axiosWeatherCurrent.get(`weather?q=${city}`);
 
-//   try {
-//     navigator.geolocation.getCurrentPosition(async ({ coords }) => {
-//       const { latitude: lat, longitude: lon } = coords;
-//       console.log(lat, lon);
-//       const responce = await axiosWeatherCurrent.get(
-//         `onecall?lat=${+lat.toFixed(2)}&lon=${+lon.toFixed(2)}`
-//       );
-//       dispatch(fetchWeatherByLocationSucces(responce.data));
-//     });
-//   } catch (e) {
-//     dispatch(fetchWeatherError(e.message));
-//   }
-// };
+        const { lat, lon } = current.data.coord;
+
+        const daily = await axiosWeatherCurrent.get(
+          `onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly`
+        );
+
+        const data = { daily: daily.data.daily, current: current.data };
+
+        return data;
+      })
+    );
+
+    dispatch(fetchTrackedCities(dataArr));
+  } catch (e) {
+    dispatch(fetchWeatherError(e.message));
+  }
+};
