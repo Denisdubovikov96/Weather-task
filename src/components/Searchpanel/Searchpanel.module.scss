@@ -5,13 +5,26 @@
   border-radius: 3px;
   display: flex;
   font-size: 18px;
-  overflow: hidden;
+
 
   input{
     padding: 10px 20px;
     flex: 1;
     border: none;
     font-size: inherit;
+    transition: all 0.3s linear;
+    &::placeholder{
+      color: rgb(0, 0, 0);
+      opacity: 0.3;
+    }
+    &:focus {
+      color: white;
+      background: rgba(20, 34, 160, 0.6);
+    }
+
+    &:focus::placeholder{
+      color: rgb(255, 255, 255);
+    }
   }
   div {
     display: flex;
@@ -75,6 +88,8 @@
         color: black;
       }
     }
+
+
 
   }
 

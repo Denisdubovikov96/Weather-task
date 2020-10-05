@@ -17,6 +17,7 @@ export default function Searchpanel() {
       <input
         type="text"
         value={term}
+        placeholder={"Введите название города"}
         onChange={(e) => setTerm(e.target.value)}
       />
       <div>
