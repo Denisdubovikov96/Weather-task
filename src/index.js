@@ -8,7 +8,6 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import "./index.css";
 import { axiosWeather } from "./api/weatherApi";
-// import ErrorBoundary from "./hoc/ErrorBoundary";
 
 const store = createStore(
   rootReducer,

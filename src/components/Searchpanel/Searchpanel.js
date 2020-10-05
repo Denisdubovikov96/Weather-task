@@ -8,7 +8,7 @@ export default function Searchpanel() {
   const dispatch = useDispatch();
   const [term, setTerm] = useState("");
 
-  const searchHandler = (term) => {
+  const searchHandler = (e, term) => {
     dispatch(fetchWeather(term));
     setTerm("");
   };
@@ -20,7 +20,12 @@ export default function Searchpanel() {
         onChange={(e) => setTerm(e.target.value)}
       />
       <div>
-        <button onClick={() => searchHandler(term)}>Поиск</button>
+        <button
+          disabled={term.length < 2}
+          onClick={(e) => searchHandler(e, term)}
+        >
+          Поиск
+        </button>
         <Link to="/my-locations">Мои Локации</Link>
         <Link to="/">Главная</Link>
       </div>
