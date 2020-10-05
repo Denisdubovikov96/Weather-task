@@ -100,7 +100,7 @@
   }
 }
 
-.header_description {
+.left_description {
   width: 200px;
   padding: 10px;
 
@@ -184,7 +184,7 @@
     flex-direction: column;
   }
   .card_left {
-    min-width: 300px;
+    min-width: 200px;
     width: 100%;
     border-right: none;
     border-bottom: 1px solid #dbdbdb;

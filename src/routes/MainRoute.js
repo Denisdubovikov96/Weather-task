@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CurrentWeatherCard from "../components/CurrentWeattherCard/CurrentWeatherCard";
 import Loader from "../components/Loader/Loader";
-import { fetchWeatherByLocation } from "../store/CurrentWeather/actions";
+import { fetchWeatherByLocation } from "../store/weather/actions";
 
 export default function MainRoute() {
   const dispatch = useDispatch();
-
-  const { data, loading } = useSelector((state) => state.weather);
-  const { dataLocation } = useSelector((state) => state.currentWeather);
+  const { dataSearch, loading, dataLocation } = useSelector(
+    (state) => state.weather
+  );
 
   useEffect(() => {
     dispatch(fetchWeatherByLocation());
@@ -16,7 +16,11 @@ export default function MainRoute() {
 
   return (
     <>
-      {data ? <CurrentWeatherCard data={data} /> : loading ? <Loader /> : null}
+      {dataSearch ? (
+        <CurrentWeatherCard data={dataSearch} />
+      ) : loading ? (
+        <Loader />
+      ) : null}
       {dataLocation ? <CurrentWeatherCard data={dataLocation} /> : <Loader />}
     </>
   );

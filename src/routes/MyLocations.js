@@ -8,7 +8,6 @@ export default function MyLocations() {
   const { data, dataTrackedCities, loading } = useSelector(
     (state) => state.weather
   );
-
   const dispatch = useDispatch();
 
   useEffect(() => {
